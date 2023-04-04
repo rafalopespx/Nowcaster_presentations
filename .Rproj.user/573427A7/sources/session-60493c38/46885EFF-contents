@@ -1,0 +1,525 @@
+---
+title: "Estimate of the instantaneous reproduction number ($R_{t}$) of an ongoing epidemic"
+subtitle: "Incorporating nowcasting and back-projection corrections"
+author: "<br>Rafael Lopes Paixão da Silva"
+date: 'October, 27th, 2021'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    self-contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+
+---
+background_image: url("fig/Logo_SUS.png")
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+
+style_mono_accent(
+  title_slide_text_color = "white",
+  base_color = "#005BAB",
+  inverse_header_color = "white",
+  inverse_text_color = "white",
+  header_h1_font_size = "2.25rem",
+  header_h2_font_size = "2rem")
+```
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_logo(image_url = "fig/oc.jpeg")
+xaringanExtra::use_tile_view()
+xaringanExtra::use_webcam()
+```
+
+.pull-left[
+
+# How we are?
+
+The "Observatório COVID19-BR" it is a __independent iniciative__ constructed by __voluntary work and collaboration__, searching to contribute to __scientific analysis__ and to the __public debate__ on the pandemic of SARS-COV2 in Brazil
+
+]
+
+--
+
+.pull-right[
+
+# On this work
+
++ __Flávia Maria Darcie Marquitti__
++ Henrique dos Santos Flores
++ Marcelo Eduardo Borges
++ Tatiana Pineda Portella
++ Silas Poloni Lyra
++ Diogo Melo
++ Renato Mendes Coutinho
++ Paulo Inácio K. L. Prado
++ Roberto André Kraenkel
+
+]
+
+---
+
+# Basic reproduction number (R0)
+
++ $R_0$ is the basic number (ratio) of reproduction and it characterizes the transmission potential of a disease
+
+--
+
++ It represents __expected__ number of secondary cases produced by a typical primary case in an entirely __susceptible__ population
+
+--
+
++ The $R_0$ of a disease is function of human __social behavior__ and organization, as well as the innate __biological__ characteristics of particular pathogens:
+ - __Transmissibility__
+ - __Contact rate__
+ - __Infectious period__
+
+--
+
++ Constant review
+  - Measles: estimate: 12-18
+  - Systematic review by Guerra et al (2017):  3-200 (!!)
+
+---
+
+## Instantaneous (effective) reproduction number (Rt, Reff)
+
+<br />
+$R_t$ is the actual average number of secondary cases per primary case and it is usually a fraction of the $R_0$: 
+
+--
+
+.center[
+
+  $$R_t = R_0 X$$
+]
+
+--
+
+where, in a simple model, $X$ is the frequency of __susceptible__ individuals in a population at a given time t
+ 
+---
+
+## Why calculate Reff?
+
+<br />
+It is commonly used to characterize pathogen __transmissibility__ during an epidemic. <br />
+
+--
+<br />
+The monitoring of R over time provides feedback on the __effectiveness__ of interventions and on the need to intensify control efforts.
+<br />
+--
+<br />
+To control an epidemic, R needs to be __persistently__ reduced to a level below 1.
+<br />
+---
+
+## (effective) reproduction number (Rt, Reff)
+
+<br />
+Important values of $R_{eff}$:
+<br />
+
+.center[
+
+ $R_{eff} > 1$:  number of new cases __increases__ <br />
+ $R_{eff} = 1$:  equilibrium of number of cases (__endemic__) <br />
+ $R_{eff} < 1$ : number of new cases __decreases__ <br />
+]
+
+
+--
+
+<br />
+__Reff (and R0) is not a rate!
+  It is a number, a ratio.__
+<br />
+--
+<br />
+Estimate the Reff for a local community, where contacts/transmissions occur
+
+---
+
+## How to estimate the Reff?
+
+Ratio between the incidence number of new cases at a time t and the incidence number of new cases  at time t-1:
+
+```{r tabela, out.width = 800, fig.align='center'}
+knitr::include_graphics("fig/tabela_reff.png")
+```
+
+However we must consider that the expected number of incidence cases at a given time __t__ depends on the number of incidence cases in previous time steps __t-s__ weighted an infectivity function __ws__
+
+$$E[I_t] = R_t\sum_{s=1}^{t}I_{t-s}w_s$$
+
+---
+
+## Database and dates
+
+There are 3 important dates for a given case: 
+
+```{r timeline, out.width = 800, fig.align='center'}
+knitr::include_graphics("fig/timeline.png")
+```
+
+Brazilian national health surveillance of hospitalized individuals (SIVEP-Gripe) we have
+access to at least 2 of them:
+  - Date of onset of first symptons
+  - Reporting date
+  
+---
+
+## Correcting delays
+
+How to correct each part of the timeline events on notification system:
+
+```{r timeline2, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/timeline2.png")
+```
+
+---
+
+## Correcting delays
+
+In our [site](https://covid19br.github.io), we go until 1st symptons date corrections:
+
+```{r timelineobs, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/timelineobs.png")
+```
+
+---
+
+## Methods to estimate $R_{eff}$
+
+There are several methods to calculate $R_{eff}$, the most known are:
+
+- Robert Koch Institute 2020
+
+- Wallinga & Teunis 2004
+
+- Bettencourt & Ribeiro 2008
+
+- Cori et al 2013
+
+--
+  + Time series of cases
+  + Serial interval distribution (transmission tree) - Incorporates uncertainty in the distrbitution the time between onset of symptons in a primary case and the onset of symptons in a secondary case.
+  
+---
+
+## Reff Observatório
+
+We calculate the $R_{eff}$ by Cori et al, incorporating the nowcasting in the workflow:
+
+```{r timelineobs2, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/timelineobs.png")
+```
+
+---
+
+## Nowcasting
+
+Nowcasting estimates the number of cases that have already occurred (that already
+have a 1st day of symptoms) but not yet been reported in the database, a forecasting for now:
+
+```{r nowcasting, out.width=600, fig.align='center'}
+knitr::include_graphics("fig/nowcasting.png")
+```
+
+---
+
+## Nowcasting
+
+Nowcasting estimates the number of cases that have already occurred (that already
+have a 1st day of symptoms) but not yet been reported in the database, a forecasting for now:
+--
+
+.pull-left[
+```{r nowcasting2, out.width=600, fig.align='center'}
+knitr::include_graphics("fig/nowcasting2.png")
+```
+]
+
+.pull-right[
+ 
++ Nowcasting by Bayesian Smoothing (McGough et al. 2020)
+ 
++ Posteriors series
+ 
+]
+
+---
+
+## Back-projection
+
+Back-projection estimates the number of cases by infection date, therefore including the incubation period (SARS-CoV2 ~ 5 days)
+
+```{r backproj, out.width=600, fig.align='center'}
+knitr::include_graphics("fig/backprojection.png")
+```
+
+---
+
+## Back-projection
+
+Back-projection estimates the number of cases by infection date, therefore including the incubation period (SARS-CoV2 ~ 5 days)
+
+.pull-left[
+```{r backproj2, out.width=600, fig.align='center'}
+knitr::include_graphics("fig/backprojection.png")
+```
+]
+
+.pull-right[
+
++ Expectation-Maximization Smoothing (Becker et al 1991)
+
++ Bootstrap Simulation 
+
+```{r serial, out.width=400, fig.align='center'}
+knitr::include_graphics("fig/serial2.png")
+```
+
+]
+
+---
+
+## Credible intervals of the Reff
+
++ Nowcasting CI: delays from de reporting system
+
++ Backprojetion CI: delay from the incubation period.
+
++ Transmission tree CI: from the method proposed by Cori et al 2013 based on cases
+that will come from the transmission tree
+
+---
+
+## Different delay corrections
+
+```{r decisiontree, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/decisiontree.png")
+```
+
+---
+
+## Results
+
++ SIVEP-Gripe (hospitalized cases)
+
++ Positive cases diagnosed by RT-PCR
+
++ Base from May 18,2020 (with a consolidated base of June 30,2020)
+
++ State capitals:
+  São Paulo (SP), Rio de Janeiro (RJ), Manaus (AM), Fortaleza (CE)
+
+---
+class: hide_logo
+
+.pull-left[
+```{r all, out.width=800}
+knitr::include_graphics("fig/fig1_reff.png")
+```
+]
+
+.pull-right[
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+```{r all2, out.width=800}
+knitr::include_graphics("fig/fig2_reff.png")
+```
+<br />
+```{r all3, out.width=800}
+knitr::include_graphics("fig/legenda.png")
+```
+
+]
+
+---
+
+## Validation
+
+```{r nowback, out.width=600, fig.align='center'}
+knitr::include_graphics("fig/NowBacknow_sp.png")
+```
+
+---
+
+## Discussion
+
++ Estimate the Rt based on the __notification date is not accurate__
+
++ Important delays that can be corrected: reporting system and incubation period
+
++ Backprojection can affect the end of the Rt time series, decreasing the Rt values due to
+the lack of data feeding the end of the time series
+
++ The nowcasting increases the CI of the Rt
+
+---
+
+## Discussion
+
++ Decisions made by policy makers and health authorities __must consider the CI__ and not
+only the mean value. The entire range of the CI must be lower than 1 to be considered
+controlled.
+
++ When using the back-projection correction, one should avoid using the most recent
+estimates of Rt (final temporal series).
+
++ Other metrics should also be taken into account for public health decisions.
+values of Rt around 1 associated with a high number of new cases per day can easily fuel a new rise
+
++ Incidence will change on different time of a pandemic, now we have __vaccines__ which reduces symptomatic. This have to be taken into account.
+
+---
+
+class: middle, center
+
+# Questions?
+
+---
+class: middle, center
+# Thank You!
+# ¡Gracias!
+# Obrigado!
+
+`r fontawesome::fa("home")` Página web: [https://covid19br.github.io/](https://covid19br.github.io/)
+`r fontawesome::fa("github")` GitHub: [https://github.com/covid19br/](https://github.com/covid19br/)
+`r fontawesome::fa("paper-plane")`  [obscovid19br@gmail.com](mailto:obscovid19br@gmail.com)
+`r fontawesome::fa("instagram")` Instagram: [@obscovid19br](www.instagram.com/obscovid19br)
+`r fontawesome::fa("twitter")` Twitter: [@obscovid19br](www.twitter.com/obscovid19br)
+`r fontawesome::fa("facebook")`  [https://www.facebook.com/obscovid19br](https://www.facebook.com/obscovid19br)
+
+---
+class: inverse
+
+---
+
+## Reff estimate
+
++ We use a modified estimate_R function from EpiEstim R package
+
++ We use a sliding window of 6 days
+
++ Serial interval by Nishiura et al 2020 for MCMC estimation for the
+transmission tree
+
+---
+
+## Nowcasting
+
++ We use a modified function from the NobBs R package (McGough et
+al 2020)
+
++ Trim of 5 days in the time series end
+
++ Time window of delay:
+São Paulo (SP): 70 days
+Manaus (AM): 60 days.
+Rio de Janeiro (RJ) and Fortaleza (CE) no window.
+
+---
+
+## Nowcasting
+
+```{r sp_now, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/sp.png")
+```
+
+---
+
+## Nowcasting
+
+```{r rj_now, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/rj.png")
+```
+
+---
+
+## Nowcasting
+
+```{r ma_now, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/am.png")
+```
+
+---
+
+## Nowcasting
+
+```{r for_now, out.width=800, fig.align='center'}
+knitr::include_graphics("fig/ce.png")
+```
+
+---
+
+## Back-projection
+
++ The incidence data is corrected by discounting delays from infection
+to the first day of symptoms using an incubation distribution defined
+by a lognormal (mean=5.2 days and 95% CI = [4.1, 7.0] days (He et al
+2020).
+
++ In contrast to the nowcasting method, which includes cases
+considering the delay of the notification system, the
+back-projection method just estimate the shift in the time series
+backwards with no addition of cases
+
+---
+
+## Back-projection
+
++ The Expectation-Maximization-Smoothing procedure of Becker et al (1991}
+gives a sample estimation of the mean number of individuals infected at
+time t and is denoted by $\lambda t$.
+
++ The sample estimation must be accompanied by a confidence interval
+which can be estimated by a bootstrap method (see Yip 2008).
+
++ We choose to return a sample draw from a Poisson distribution with mean
+$\lambda t$ after we have back-projected our data.
+
+---
+
+## Back-projection
+
++ This procedure is repeated for 1,000 posterior nowcasted series. The
+sample error for the $\lambda t$ computation is incorporated when we consider a
+large number of back-projected samples of a nowcasted series.
+
++ The complete routine is implemented in C++ and is already integrated with
+R via the Rcpp package
+
+---
+class: hide_logo
+background-image: url("fig/Logo_SUS.png")
+background-size: 200px
+background-position: 95% 5%
+
+
+# Sistema Único de Saúde (SUS)
+
++ País continental
++ ~212 milhões de pessoas
++ Desigualdade e heterogeneidade, Sistema Federal (27 Estados)
++ Constitução Federal de 1988: __Sistema Único de Saúde__
++ Sistema __Universal, Público e Gratuito__
++ Unidades básicas de saúde, hospitais, rede de __Agentes Comunitários de Saúde (ACS)__ na frente de atenção ao público, rede de Unidades de Atenção Primária (UPA), hospitais & convênios com a rede privada de saúde
++ __Larga história de respostas efetivas pandemias/epidemias__. ZIKV em 2014, AIDS desde 1980.
++ Tradição de investigação em saúde pública e enfermedades tropicais (FIOCRUZ, Instituto Butantan) e __capacidade de produção de vacinas__ (CORONAVAC)
++ Um dos maiores programas de vacunação do mundo: +271.861.944 doses aplicadas desde  17 de Janeiro.

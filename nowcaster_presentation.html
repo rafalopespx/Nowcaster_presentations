@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Nowcasting the notification delay for real-time decision making, with Nowcaster</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Rafael Lopes &amp; Leonardo S. Bastos" />
+    <meta name="date" content="2023-04-04" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Nowcasting the notification delay for real-time decision making, with Nowcaster
+]
+.subtitle[
+## Epinowcast Seminar
+]
+.author[
+### Rafael Lopes &amp; Leonardo S. Bastos
+]
+.institute[
+### Observatório COVID-19 BR
+]
+.date[
+### 2023-04-04
+]
+
+---
+
+
+
+
+
+
+---
+
+## Find us at
+
+.pull-left[
+
+#Rafael Lopes
+
+Associate postdoctoral researcher at Yale University
+
+<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> GitHub: [https://github.com/rafalopespx/](https://github.com/rafalopespx/)
+
+<svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M96 0C78.3 0 64 14.3 64 32V224h96V192c0-35.3 28.7-64 64-64H448V32c0-17.7-14.3-32-32-32H96zM224 160c-17.7 0-32 14.3-32 32v32h96c35.3 0 64 28.7 64 64V416H544c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32H224zm240 64h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zM32 256c-17.7 0-32 14.3-32 32v13L155.1 415.9c1.4 1 3.1 1.6 4.9 1.6s3.5-.6 4.9-1.6L320 301V288c0-17.7-14.3-32-32-32H32zm288 84.8L184 441.6c-6.9 5.1-15.3 7.9-24 7.9s-17-2.8-24-7.9L0 340.8V480c0 17.7 14.3 32 32 32H288c17.7 0 32-14.3 32-32V340.8z"/></svg> e-Mail: [rafael.lopes@yale.edu](mailto:rafael.lopes@yale.edu)
+
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> Twitter: [@rafalpx](www.twitter.com/rafalpx)
+
+]
+
+.pull-right[
+
+#Leonardo Bastos
+
+Associate Researcher at Fiocruz
+
+<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> GitHub: [https://github.com/lsbastos/](https://github.com/lsbastos/)
+
+<svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M96 0C78.3 0 64 14.3 64 32V224h96V192c0-35.3 28.7-64 64-64H448V32c0-17.7-14.3-32-32-32H96zM224 160c-17.7 0-32 14.3-32 32v32h96c35.3 0 64 28.7 64 64V416H544c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32H224zm240 64h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zM32 256c-17.7 0-32 14.3-32 32v13L155.1 415.9c1.4 1 3.1 1.6 4.9 1.6s3.5-.6 4.9-1.6L320 301V288c0-17.7-14.3-32-32-32H32zm288 84.8L184 441.6c-6.9 5.1-15.3 7.9-24 7.9s-17-2.8-24-7.9L0 340.8V480c0 17.7 14.3 32 32 32H288c17.7 0 32-14.3 32-32V340.8z"/></svg> e-Mail: [leonardo.bastos@fiocruz.br](mailto:leonardo.bastos@fiocruz.br)
+
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> Twitter: [@leosbastos](www.twitter.com/leosbastos)
+
+]
+
+---
+
+class: middle, center, inverse
+
+# Background &amp; definitions
+
+---
+
+## Observatório COVID-19 BR
+
+The "Observatório COVID-19 BR" is a voluntary scientific and science communication initiative to inform the public debate about the pandemic in Brazil. The "Observatório" comes as a initiative to dispute the polarized debate and focus some of the public attention, on effective measures on what is the pandemic and its impacts on the population. We produce weekly nowcasting estimates for all of 27 states of Brazil, for all 27 state capitals and some others selected cities. 
+
+&lt;br&gt;
+&lt;center&gt;
+
+
+### https://covid19br.github.io/
+
+---
+
+## Notification process
+
+Brazil has many systems to mandatory notification of infectious diseases and grievances of mandatory, normally endemic diseases, such as Dengue, Chikungunya, Zika, HIV, Malaria, Tuberculosis, etc. Syndromic grievances on the sentinel strategies for surveillance, such as Severe Acute Respiratories Illness (SARI), Pedeatric Multi-systemic Inflammatory Syndrome (SIMP, pt-br), Influenza like-illness (SG, pt-br), as well as chronic diseases, as Cancer, Diabetes, etc.
+
++ __Every single notification system has delays__. Some are caused by notification process itself, some are caused by the natural history of the disease and some are caused by the both.
+
++ __Nowcasting is the procedure of estimating happening now counts__. Cases, hospitalizations and deaths counts, that were not yet notified, or although has happened and were notified, were accounted on the real-time counts. In summary, short-term data based forecasting.
+
+---
+
+## Viz of delays
+
+It is hard to abstract and understand how delays impacts on cases, hospitalizations and deaths counts. A time line of the notificaiton process can help, every single disease has more than one important date, date of infection, date of onset of first symptoms and date of notification, are the ones we are concerned:
+
+&lt;br&gt;
+&lt;center&gt;
+
+![time-line](fig/timeline2.png)
+
+---
+
+## Access to dates
+
+Although these 3 dates are of interest, usually we don't have total access to them. Nowcasting acts on the second half of the chain of events, the procedure to estimate dates of infections, is back projection, important on long-term latent period IDs(e.g HIV).
+
++ __Date of infection__ is always a date that has to be supposed, is hard to capture infection events and there is no true way to measure it. 
+
++ __Date of onset of first symptoms__, are the most important and are the measure of the pace of an outbreak, it is normally accessible. The time window between Date of infection and Date of onset of first symptoms, is the incubation period, which influences delays on outbreaks notification. 
+
++ __Date of notification__ are the date in which the count were officially counted, the date when the system "knows" the count. The time window between Date of onset of first symptoms and Date of notification, is the notification delay, and heavily influences the nowcasting estimates.
+
+---
+
+## Delays are misleading
+
+.pull-left[
+
++ Taking any curve of counts as its face value is misleading, the people, in general, are not trained or informed of such chains of events. 
+
++ This make the necessity to: 
+    + first acknowledge that the counts we are seeing now, are not the real-time facts. 
+    
+    + Second, not considering the delays and the chain of events, are problematic instance when policies and actions have to be drawn from the data.
+
+
+]
+
+.pull-right[
+
+![gif](fig/sivep-gripe.gif)
+
+]
+
+---
+
+## Delay correction models
+
+The procedure of nowcasting is not new, is being present on actuarial sciences since 1980s:
+
++ Chain ladder model Kremer (1982) 
+`$$C_{i,j} = E_iS_jR_{i,j}$$`
+
++ Linear mixed models Renshaw (1989)
+`$$Y_{i,j} = log (C_{i,j}) = \mu + \alpha_i + \beta_j + \epsilon_{i,j}$$`
+
+---
+
+## Delay correction on IDs
+
+HIV epidemic has posed a challenge on notification and real-time estimates of incidence as well as case counts, having a long-term latent phase (i.e. the acute phase can emerge over than 10 years after the infection), the cases now diagnosed are probables infections of years ago: 
+
++ Contributes to the cryptic spreading of the disease
+
++ Needed to be taking into account when planning policies to mitigate, treat and stop the outbreaks
+
+---
+
+## Delay correction on IDs
+
+.pull-left[
+
+Zeger, See, and Diggle (1989) proposed, now classical, model to correct delays and estimate cases:
+
+`$$Y_t,u \sim Poisson(\mu_{t,u}), \\ log(\mu_{t,u} = s(t,\beta) + d(\mu, \theta))$$`
+
+.footnote[ Figure extracted from: Zeger, See, and Diggle (1989) ]
+
+]
+
+.pull-right[
+
+![hiv-diagnosed](fig/diggle1989.jpg)
+]
+
+---
+
+## Bayesian nowcasting
+
+Bayesian framwework can be used for nowcasting on IDs, as like Dengue and Influenza, examples of application are:
+
++ Bastos, Economou, Gomes, Villela, Coelho, Cruz, Stoner, Bailey, and Codeço (2019) via INLA, the model proposed is a _Negative Binomial_, to correct notification delays in Dengue seasonal epidemics in Brazil:
+
+`$$n_{t,d} \sim NegBin(\lambda_{t,d}, \phi) \\ log(\lambda_{t,d}) = \mu + \alpha_t + \beta_d + \gamma_{t,d}$$`
+
++ McGough, Johansson, Lipsitch, and Menzies (2020), via MCMC, a _Poisson_ model is proposed for correcting notification delays in influenza outbreaks:
+  
+`$$n_{t,d} \sim Poisson(\lambda_{t,d}) \\ \lambda_{t,d} = \delta_de^{\beta_t}$$`
+
+---
+
+## Delay triangle
+
+.pull-left[
+
+The language of nowcasting can be easily visualized by a delay triangle, again on the Bastos, Economou, Gomes et al. (2019):
+
+`$$n_{t,d} \sim NegBin(\lambda_{t,d}, \phi) \\ log(\lambda_{t,d}) = \mu + \alpha_t + \beta_d + \gamma_{t,d}$$`
+
+The random effect `\(\alpha_t\)` to capture the mean temporal evolution of the count-generating process, whereas the `\(\beta_d\)` capture the mean structure of the delay mechanism. These can be modeled using random walks. Lastly, `\(\gamma_{t,d}\)` is the time-delay interaction.
+
+Bastos, Economou, Gomes et al. (2019) extends this model to a spatial version, with space-time and space-delay interactions.
+
+]
+
+.pull-right[
+
+![delay-triangle](fig/delay-triangle.png)
+
+.footnote[ Figure extracted from: Bastos, Economou, Gomes et al. (2019) ]
+
+]
+
+---
+
+class: middle, center, inverse
+
+.pull-left[
+
+# Nowcaster R package
+
+]
+
+.pull-right[
+
+# &lt;a href='https://covid19br.github.io/nowcaster'&gt;&lt;img src='fig/nowcaster.png' align="right" width="240" /&gt;&lt;/a&gt; &lt;a href='https://covid19br.github.io/nowcaster'&gt;&lt;img src='fig/nowcaster_rev.png' align="right" width="240" /&gt;&lt;/a&gt;
+
+]
+
+---
+
+## Nowcaster as tool on surveillance
+
+The package born as a need on having a tool that is user-friendly and open to deal with the typical demands on day-to-day of surveillance work. During the first semester of 2022, we wrapped a modification of the model in Bastos, Economou, Gomes et al. (2019) into an R package. We focused in:
+
++ Keeping the model simple, fast and good in one thing, estimating the delay due to notification
+    
++ Clear usage of the functions, one function to do all the work receiving data almost raw from the SIVEP-Gripe
+
++ A modified version of this algorithm is in use by _InfoGripe_, _InfoDengue_, surveillance services on outbreaks of Influenza-like Illness and Dengue-like Illness in Brazil
+
+---
+
+## Installing Nowcaster
+
+Nowcaster is a wrapper around a model written in __INLA__, which is not on CRAN, to install and use the package, make sure you have a working installation of INLA, to do so run the following lines in R:
+
+
+```r
+## Installing INLA
+install.packages("INLA",
+                 repos=c(getOption("repos"),
+                         INLA="https://inla.r-inla-download.org/R/stable"), 
+                 dep=TRUE)
+
+## Installing Nowcaster
+devtools::install_github("https://github.com/covid19br/nowcaster")
+```
+---
+
+## Nowcaster R Package
+
+Nowcaster wrapper a set of functions for nowcasting the delays, it is based on the __INLA__ R package, which is a **I**ntegrated **N**ested **L**aplace **A**pproximation engine for bayesian inference
+
++ INLA is faster than the traditional methods of Bayesian inference, as like MCMC and HMC
+
++ For big-data issues, like nowcasting cases of an ongoing pandemic has a user-friendly language
+
++ It is limited to models inside the exponential family
+
++ __Nowcaster__ package works with 2 basic models, a non-age dependent model, which supposes that delays are equally distributed by age-class and a age-dependent model, which stratifies the delays by age-classes
+
+---
+
+## Non-age dependent model
+
+Non-age dependent model has the form: `\(Y_{t,d} \sim NegBinom(\lambda_{t,d}, \phi)\)`, which estimates the cases count at time `\(t\)` with delay `\(d\)`, `\(\phi\)` is the dispersion parameter.
+
+`$$log(\lambda_{t,d}) = \alpha + \beta_{t} + \gamma_{d}$$`
+
+where the intercept `\(\alpha\)` follows a Gaussian distribution with a very large variance, `\(\beta_{t}\)` follows a second order random walk with precision `\(\tau_{\beta}\)`, `\(\gamma_{d}\)` follows a first-order random walk with precision `\(\tau_{\gamma}\)`
+
+---
+
+## Usage non-age dependent model
+
+.pull-left[
+
+
+```r
+# Loading the library
+library(nowcaster)
+# Loading Belo Horizonte SARI dataset
+data(sragBH)
+# Calling the nowcasting_inla function
+nowcasting_bh_no_age &lt;- 
+  nowcasting_inla(
+    ## sragBH, the lazydata in the package
+    dataset = sragBH, 
+    ## "DT_SIN_PRI", 
+    ## column of date of onset of symptoms
+    date_onset = "DT_SIN_PRI", 
+    ## "DT_DIGITA", 
+    ## column of digitation date
+    date_report = "DT_DIGITA", 
+    ## a flag to return the data weekly
+    data.by.week = T)
+```
+
+]
+
+.pull-right[
+
+![non-age model](fig/nowcasting_non_age_model.png)
+
+
+]
+
+---
+
+## Age-dependent model
+
+Age dependent model has the form: `\(Y_{t,d,a} \sim NegBinom(\lambda_{t,d,a}, \phi)\)`, which estimates the cases count at time `\(t\)` with delay `\(d\)`, `\(\phi\)` is the dispersion parameter. Differently, from the non-structured model, now gives random effects to the delay distribution and time distribution by each of the age-class.
+
+`$$log(\lambda_{t,d,a}) = \alpha_{a} + \beta_{t,a} + \gamma_{d,a}$$`
+
+where each age class, `\(a\)`, has an intercept `\(\alpha_{a}\)` following a Gaussian distribution with a very large variance, as before the `\(\beta\)` and `\(\gamma\)` terms are a second-order random walk and a first-order random walk, respectively.
+
+---
+
+## Usage age-dependent model
+
+.pull-left[
+
+
+```r
+## Calling the nowcasting_inla function
+nowcasting_bh_age &lt;- 
+  nowcasting_inla(
+    ## sragBH, the lazydata in the package
+    dataset = sragBH, 
+    ## "DT_SIN_PRI", 
+    ## column of date of onset of symptoms
+    date_onset = "DT_SIN_PRI", 
+    ## "DT_DIGITA", 
+    ## column of digitation date
+    date_report = "DT_DIGITA", 
+    ## a flag to return the data weekly
+    data.by.week = T,
+    ## Bins,
+    ## into which ages will be classified
+    bins_age = "10 years",
+    ## Age column
+    age_col = "Idade")
+```
+]
+
+.pull-right[
+
+![age model](fig/nowcasting_age_model.png)
+]
+
+---
+
+## InfoGripe &amp; InfoDengue, CVE
+
+Nowcaster, or modified versions of the model contained in the package are being used for different services in Brazil:
+
++ __InfoGripe__, is a alert system monitoring the Severe Acute Respiratory Illness (SARI) records, it was the primary alert system during the Covid-19 pandemic, [http://info.gripe.fiocruz.br/](http://info.gripe.fiocruz.br/)
+
++ __InfoDengue__, is a alert system monitoring the arbovirus suspected notified cases, through the national system for Dengue-like illness notification [https://info.dengue.mat.br/](https://info.dengue.mat.br/)
+
++ __CVE__, short for the São Paulo State CDC, uses the package as its routinely monitoring on respiratory notified diseases, from SARI state notifications, Influenza-like illness (ILI), RSV pediatric hospitalizations records, measles records, etc.
+
+---
+
+## Takeaways
+
++ __Delays are everywhere__. This is misleading to unaware people, as well as for policymaker, politicians, journalists and the public debate, first recognize there are delays and after it, take new insights from the data.
+
++ __ Keep it simple, open and easy to use.__ Policymakers, decision makers and government staff, needs to take hugely impacting decisions in short-term, being simple on what is the problem, how to possibly overcome and the consequences of acting on it helps the dialogue with them. Building tools with user-friendly interfaces that can be incorporated to the workflow.
+
++ __Always updating, always discussing the results__. Alert systems, surveillance systems, are tools for monitoring IDs on daily or weekly basis, maintaining discussions on the outcome of those tools is essential to grow a community which is engaged on the problem and always tries to come with a solution or new insights.
+
+---
+
+## Acknowledgements
+
+.pull-left[
+
+- To the financing project from Fiotec fellowship, to create the package
+
+- To all sort of help and commentaries that we received through the process, in special from the usage on CVE
+
+]
+
+.pull-right[
+
+# &lt;a href='https://info.dengue.mat.br/'&gt;&lt;img src='fig/infodengue.png' align="right" width="240" /&gt;&lt;/a&gt; 
+
+# &lt;a href='http://info.gripe.fiocruz.br/'&gt;&lt;img src='fig/infogripe.png' align="left" width="240" /&gt;&lt;/a&gt;
+
+# &lt;a href='https://www.fiotec.fiocruz.br/en/'&gt;&lt;img src='fig/fiotec.png' align="right" width="240" /&gt;&lt;/a&gt; 
+
+# &lt;a href='https://www.gov.br/saude/pt-br'&gt;&lt;img src='fig/Logo_SUS.png' align="left" width="240" /&gt;&lt;/a&gt;
+]
+
+---
+
+class: middle, center, hide-logo
+
+# Thank You!
+# <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg> Nowcaster: [**covid19br.github.io/nowcaster**](https://covid19br.github.io/nowcaster)
+
+Submit a PR: 
+    <svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> GitHub: [**https://github.com/covid19/nowcaster**](https://github.com/covid19br/nowcaster)
+
+Reach us in Twitter, until it you can: 
+    <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> Twitter: [**@rafalpx**](www.twitter.com/rafalpx)/[**@leosbastos**](www.twitter.com/leosbastos)
+
+---
+
+# References
+
+Bastos, L. S., T. Economou, M. F. Gomes, et al. (2019). "A modelling
+approach for correcting reporting delays in disease surveillance data".
+In: _Statistics in medicine_ 38.22, pp. 4363-4377.
+
+Kremer, E. (1982). "IBNR-claims and the two-way model of ANOVA". In:
+_Scandinavian Actuarial Journal_ 1982.1, pp. 47-55.
+
+McGough, S. F., M. A. Johansson, M. Lipsitch, et al. (2020).
+"Nowcasting by Bayesian Smoothing: A flexible, generalizable model for
+real-time epidemic tracking". In: _PLoS computational biology_ 16.4, p.
+e1007735.
+
+Renshaw, A. E. (1989). "Chain ladder and interactive modelling.(Claims
+reserving and GLIM)". In: _Journal of the Institute of Actuaries_
+116.3, pp. 559-587.
+
+Zeger, S. L., L. See, and P. J. Diggle (1989). "Statistical methods for
+monitoring the AIDS epidemic". In: _Statistics in Medicine_ 8.1, pp.
+3-21.
+---
+class: center, middle, inverse
+
+# Appendix
+
+---
+
+## Priors on Bastos et al. 2019
+
+On Bastos, Economou, Gomes et al. (2019) model, the `\(\alpha_t\)` and `\(\beta_d\)` covariates are modeled using random walks, as like:
+
+`$$\alpha_t = N(\alpha_{t-1}, \sigma_{\alpha}^2), t =  2,3, \dots, T, \\
+\beta_d = N(\beta_{d-1}, \sigma_{\beta}^2), d = 1,2, \dots, D$$`
+
+With priors distribution of *Half-Normal* `\(HN(\tau^2)\)` for `\(\sigma_{\alpha}\)` and `\(\sigma_{\beta}\)`.
+
+---
+
+## Priors Nowcaster
+
+In Nowcaster, we have settled the priors to the random walks for the `\(\beta_t\)` and `\(\gamma_d\)`, as like:
+
+`$$\beta_t = N(\beta_{t-1}, \sigma_{\beta}^2), t =  2,3, \dots, T, \\
+\gamma_d = N(2\gamma_{d-1} - \gamma_{d-2}, \sigma_{\gamma}^2), d = 1,2, \dots, D$$`
+
+With priors distribution of *Gamma* `\(Gamma(10^{-3}, 10^{-3})\)` for `\(\sigma_{\beta}\)` and `\(\sigma_{\gamma}\)`.
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

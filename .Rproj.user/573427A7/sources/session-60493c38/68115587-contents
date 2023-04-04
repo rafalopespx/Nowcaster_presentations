@@ -1,0 +1,600 @@
+---
+title: "El Observatorio COVID-19BR: <br> ciudadanía científica frente a la pandemia en Brasil"
+subtitle: "ConectaR-2021"  
+author: "<br>Andrea Sánchez-Tapia"
+date: '4 de febrero de 2021'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+
+---
+background_image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Logo_SUS.svg/279px-Logo_SUS.svg.png)
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+
+style_mono_accent(
+  title_slide_text_color = "white",
+  base_color = "#005BAB",
+  inverse_header_color = "white",
+  inverse_text_color = "white",
+  header_h1_font_size = "2.25rem",
+  header_h2_font_size = "2rem")
+```
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_logo(image_url = "fig/oc.jpeg")
+xaringanExtra::use_tile_view()
+xaringanExtra::use_webcam()
+```
+
+## ¿Quiénes somos?
+
++ El Observatorio COVID19-BR es una __iniciativa independiente__ fruto del __trabajo conjunto y voluntario__ de sus participantes, que busca contribuir al __análisis científico__ y al __debate público__ alrededor de la pandemia por SARS-COV2 en Brasil
+
+--
+
++ Analizamos las tendencias de la pandemia, modelamos el efecto de diferentes escenarios y medidas de contención, y discutimos políticas de salud pública
+
+--
+
++ Colaboramos con equipos de las __Secretarías de Salud__ de algunos __municipios centinelas__
+
+--
+
++ Interactuamos con la prensa, las autoridades locales y el público general a través de nuestra página web, entrevistas, pronunciamientos y redes sociales
+
+--
+
+#### Creemos en valores de diálogo fundamentado científicamente, en la ciencia abierta y accesible, en la reproducibilidad de los análisis y en la transparencia de los datos
+
+---
+## ¿Quiénes somos?
+
++ Creado el 14 de Marzo de 2020 por Roberto Kraenkel (UNESP-SP), Paulo Inácio Prado (USP), Renato Coutinho (UFABC) <!-- modelos matemáticos para analizar la expansión del virus-->
+
+--
+
++ _Southern-Summer Schools on Mathematical Biology_ del ICTP-SAIFR (IFT-UNESP)
+
+--
+
++ Hoy: más de 60 investigadores en instituciones brasileñas y del mundo. Equipo multidisciplinario: física, biología, medicina, epidemiología, inmunología, salud pública, ciencias políticas, comunicación científica
+
+--
+
++ Estudiantes de pregrado y posgrado, post-docs, investigadores en todas las fases de carrera
+
+--
+
++ Equipos de __análisis de datos__, de __modelamiento matemático__, de __epidemiología y salud pública__, y de __comunicación__
+
+--
+
+<br>
+<center>
+
+
+### https://covid19br.github.io/
+
+
+
+---
+## Análisis de datos
+
+__Grupo de procesamiento inicial y _nowcasting___
+
+Paulo Inácio Prado,
+Renato Coutinho,
+Rafael Lopes,
+Tatiana Portella,
+Sara Mortara,
+Diogo Melo, 
+Andrea Sánchez-Tapia
+
+--
+
+__Grupo de cálculo de R efectivo__
+
+Flávia Marquitti,
+Henrique Flores,
+Rafael Lopes,
+Renato Coutinho,
+Diogo Melo,
+Marcelo Borges,
+Silas Poloni Lyra,
+Tatiana Portella
+
+--
+
+__Grupo de modelamiento matemático de diferentes escenarios__
+
+Caroline Franco, 
+Leonardo Souto Ferreira,
+Renato Coutinho, 
+Roberto Kraenkel, 
+Silas Poloni Lyra,
+Vitor Sudbrack, 
+Vitor Mori, 
+Marcelo Eduardo Borges
+
+--
+
+__Mantenimiento del sitio web__
+
+Rafael Badain, Vitor Sudbrack, Renato Coutinho, Rafael Lopes, Flavia Ferrari
+
+
+---
+# Los dados sobre COVID-19 en Brasil 
+
+
++ Sistema de vigilancia epidemiológica:
+
+  + __SIVEP-Gripe__. Casos de Síndrome Respiratorio Agudo Grave (SRAG), desde 2009 (H1N1) 
+  + __eSUS-VE__. Casos sospechosos leves ("síndrome gripal"), desde Abril 2020 
+
+--
+
++ Campos demográficos (anonimizados), tipo de prueba realizada, síntomas, resultados de las pruebas
+
+--
+
++ __Fechas__ de inicio de los síntomas, de ingreso al sistema, de hospitalización, de evolución (cura/fallecimiento), de notificación y cierre del caso
+
+--
+
++ Cada municipio/estado tiene sus propias bases de datos y las limpia y deduplica <!--Casos de personas que entran a algunos hospitales que primero entran al Sistema eSUS-VE como casos leves y después se agravan y entran al sistema SIVEP. -->
+
+--
+
+<center>
+
+__Escenario complejo y diferentes niveles de detalle con la escala geográfica__
+
+
+---
+## Algunas decisiones de análisis
+
++ __SIVEP-Gripe__ es más precisa y tiende a estar más limpia <!-- y era la única que existía al inicio de la pandemia-->
+
+--
+
++ Por __falta de pruebas diagnósticas__ hasta 85% de los casos de SRAG sin tests conclusivos pueden ser COVID: __tenemos que analizar COVID y SRAG__
+
+--
+
++ ¿Qué fecha utilizar? ¿Fecha de internación, fecha de notificación del caso? 
+
+--
+
++ Hay un __atraso inherente al sistema de vigilancia__
+
+
+---
+class: hide_logo, middle 
+
+```{r linha do tempo, out.width = 800, fig.align='center'}
+knitr::include_graphics("https://covid19br.github.io/fig/folder_covid2-03.png")
+```
+
+Créditos: Camila Estevam, Vitor Mori
+
+???
+alt-text: una figura con la línea de tiempo de transmisión de COVID19. en esta diapositiva se muestra el atraso entre el momento en que la persona de infecta y tiene los primeros síntomas (3 a 5 días) y el momento en que busca atención médica. El caso es confirmado varios días después de la infección
+
+---
+class: hide_logo, middle 
+
+```{r atrasos, out.width = 550, fig.align='center'}
+knitr::include_graphics("fig/gif_BE_21_julho_no_sivep.gif")
+```
+
+Créditos: Rafael Lopes, Gustavo Burin
+
+???
+alt-text: un gif con varias curvas sucesivas del número de muertes notificadas (eje y) por fecha de fallecimiento (eje x). Todas las curvas presentan una caída al final de la serie temporal, debido al atrado en la notificación y cada boletín nuevo (o sea cada curva nueva en la animación) añade decesos a toda la serie temporal, indicando que todavía hay decesos antiguos que entran al sistema muchos días después
+
+---
+# Corrigiendo el atraso de notificación
+
++ "_Nowcasting_" por _smoothing_ bayesiano: paquete `NobBS` (McGough et al. 2020)
+
+
+```{r, out.width=700}
+knitr::include_graphics("fig/nowcasting.svg")
+```
+
+???
+un dato clave en sí mismo
+útil para calcular r efectivo
+
+alt-text: una curva de número de decesos (en el eje y) por fecha del deceso, entre abril 2020 y enero 2021. La curva tiene un pico alrededor de Julio-Agosto y desde entonces vuelve a caer, retomando a finales de noviembre aproximadamente. Los últimos 60 días de la curva muestran dos series de puntos, los notificados, que presentan una caída al final de la serie (debido al atrado en la notificación) y los corregidos por nowcasting, que muestran que el número probable de casos al final de la serie es mucho mayor que el notificado y puede corresponder a una segunda ola
+
+---
+
+## Grupo de R efectivo
+
+
++ __R efectivo__: una de las cifras claves para entender el estado de la pandemia: número de personas infectadas en el tiempo `t + 1` por cada persona infectada en el tiempo `t`
+
+--
+
++ `R < 1` desaceleración, `R = 1` estabilidad, `R > 1` aceleración de la transmisión
+
+--
+
++ Paquete __EpiEstim__ (Cori 2020)
+
+--
+
++ El grupo de R efectivo del Observatorio está investigando maneras de mejorar este cálculo incluyendo:
+
+--
+
+  + La corrección por _nowcasting_
+
+--
+  
+  + Una corrección (retroproyección) para __estimar la fecha de infección__ (anterior al inicio de los síntomas) a partir de la distribución estadística del __tiempo de incubación__ de la enfermedad (Lauer et al 2020)
+ 
+--
+
+Flávia Marquitti: `r fontawesome::fa("twitter", fill = "#005BAB")` [@flamarquitti](www.twitter.com/flamarquitti) 
+
+
+---
+class: hide_logo
+background-image: url("https://www.r-project.org/logo/Rlogo.svg")
+background-position: 80% 70%
+background-size: 100px
+## Flujo de trabajo general
+
+```{r, out.width = 800, fig.align='center'}
+knitr::include_graphics("fig/central_covid.svg")
+```
+
+--
+
+Usuarios de la página web pueden descargar los datos crudos y procesados, los scripts, y las figuras https://github.com/covid19br/
+
+???
+Una serie de scripts de R y bash que: 
++ detectan cuando la base de datos ha sido subida
++ chequean la __integridad__ de las bases (que han cambiado con el tiempo)
++ realizan el _nowcasting_ de casos y muertes de SRAG y casos confirmados de COVID-19
++ calculan el __R efectivo__ (sin retroproyección) 
++ hacen las __figuras__ y las suben a la página web
+
+
+---
+# Escala espacial de los análisis
+
+Análisis a diferentes escalas espaciales:
+
++ Estados, Distritos Regionales de Salud (DRS) del Estado de São Paulo, municipios
+
+--
+
++ Los municipios escogidos son __una lista específica con responsables__ de verificar que las curvas y la información externa concuerden
+
+--
+
++ ¿Por qué no hacer seguimiento individual de los 5570 municipios de Brasil? 
+
+--
+
+  + Alta demanda computacional
+
+--
+
+  + Muchos municipios con bajísima notificación, sin hospitales o unidades de cuidados intensivos
+
+--
+
++ __Falta de contexto__ para realizar ese análisis
+
+--
+
++ Preferimos: trabajar directamente con __municipios centinelas__ (posibilidad de entender mejor el contexto)
+
+---
+# Relación con municipios
+
+Maria Amélia Veras, Rita Donalísio, Camila Estevam, Vitor Mori, Rafael Lopes, Sara Mortara, Paulo Inácio Prado, Andrea Sánchez-Tapia, Guiliano Boava, Leandro Garcia, Flavia Corrallo, Josimari Lacerda, Brigina Kemp, Alexandra Boing, Antonio Boing, Eleonora D'Orsi, Guilherme Moura, Maurício Magnani, Edson Júnior
+
++ Florianópolis (SC), Campinas (SP), Diadema (SP)
+
+--
+
++ Cada uno con su __equipo de profesionales__, metodología y __flujo de trabajo independiente__ 
+
+--
+
++ Repositorios propios, bases de datos privadas, confidenciales
+
+--
+
++ Reuniones semanales o quincenales, algunas reuniones de todos los equipos
+
+--
+
++ Intercambio de experiencias con y entre profesionales del sector de la salud pública 
+
+---
+class: inverse, middle, center
+
+# Otros análisis del Observatorio
+
+---
+class: hide_logo 
+background-image: url("fig/CoMo-logo-large.png")
+background-size: 200px
+background-position: 95% 5%
+
+## Modelamiento matemático
+
++ Colaboración con el __CoMo Consortium__, Universidad de Oxford
+
+--
+
++ Modelos matemáticos de la expansión del virus llevando en cuenta su transmisibilidad, matrices de contacto, la estructura de edades de la población
+
+--
+
++ Requiere clasificar a la población de interés en categorías (__S__: susceptibles, __E__: expuestos, __I__: infectados, __H__: hospitalizados, __R__: recuperados, __F__: fallecidos)
+
+--
+
++ Admite estratificación por edades 
+
+--
+
++ Para hacer estos modelos necesitamos los __mejores datos posibles__: escala espacial más fina (São Paulo capital)
+
+--
+
+<br>
+<br>
+<br>
+
+CoMo Consortium: `r fontawesome::fa("twitter", fill = "#005BAB")` [@ComoConsortium](www.twitter.com/ComoConsortium) https://como.bmj.com/
+
+
+
+---
+class: hide_logo 
+## Modelamiento matemático
+
+```{r, out.width=900, fig.align='center'}
+knitr::include_graphics("fig/como_diagram.png")
+```
+
+Contacto: Caroline Franco `r fontawesome::fa("twitter", fill = "#005BAB")`  [@_francocarol](www.twitter.com/_francocarol) 
+
+???
+ 
++ Un sistema de ecuaciones diferenciales donde la respuesta es delta casos / delta t
++ El efecto de medidas de contención puede ser modelado: si hay __confinamiento__ el número de susceptibles no disminuye pero la transmisión (matriz de contactos) cambia
+
+---
+## Modelamiento matemático
+
++ Efecto del confinamiento (Marzo 2020) y de otros escenarios: apertura de escuelas, vacunación con 1 y 2 dosis
+
+
+```{r, out.width=450, fig.align='center'}
+knitr::include_graphics("https://covid19br.github.io/web/cenarios/site_base_now_and_endofyear_31may_PT.md.svg")
+```
+
+???
+tres linesas: nada, relajar ahora, seguir hasta final de año
+otros temas como efecto de la apertura de escuelas y escenarios de vacunación
++ Otras categorías (y subcategorías) pueden ser especificadas (por ejemplo __V__: vacunados, dejan de ser susceptibles y no serán infectados, pero también __V1__ y __V2__ según las dosis, con un intervalo de tiempo entre ellas)
+
+---
+## Grupo de epidemiología, salud pública y políticas públicas
+
+Maria Amélia Veras, Márcia Castro, Ana Ribeiro, Verônica Coelho, Rita Donalísio, Camila Estevam, Lorena Barberia, Tatiane Moraes, Natalia Moreira, Gabriela Lotta, Janaína Maudonnet, José Cássio de Mores, Brigina Kemp
+
+--
+
++ __Robustez__ y __contexto__ para el análisis de datos
+
+--
+
++ Análisis socio-económicos y de políticas públicas
+
+--
+
++ Organización de charlas semanales con grupos invitados
+
+--
+
++ Entrevistas en televisión y radio, "lives", webinars, materias de posgrado 
+
+
+???
++ Presentación de grupos invitados <!--(que a veces se quedan <3)-->
++ Charla sobre algún tema de interés
+      + Reapertura de colegios y escuelas
+      + Plan Nacional de Vacunación
+      + Vacunas
+      + Modelos matemáticos
+
+
+
+---
+## Equipo de comunicación
+
+Flávia Ferrari, Rafael Lopes, Laura Segovia Tercic, Vitor Mori, Marcelo Kubo, Monica de Bolle
+
+--
+
++ Redacción colectiva de textos e hilos de twitter
+
+--
+
++ Creación de animaciones e infográficos
+
+--
+
++ Creación y traducción de material de divulgación
+
+--
+
++ Contactos con la prensa
+
+--
+
++ Cartas abiertas en periódicos
+
+--
+
++ __Contacto directo con el público__ vía redes sociales
+
+--
+
++ Participación en campañas de salud pública: __#AdiaENEM__, [__#TodosPelasVacinas__](https://twitter.com/search?q=%23todospelasvacinas&src=typeahead_click), [http://www.todospelasvacinas.info/](http://www.todospelasvacinas.info/)
+
+
+
+---
+# Lecciones
+
++ La unión hace la fuerza: trabajo interdisciplinario <!--nadie aislado lograria una fracción de lo que estamos haciendo, y todo colaborador, independientemente de la fase de carrera, cuenta--> 
+
+--
+
++ __Organización horizontal__. Toma de decisión, redacción de textos, grupos de trabajo, soporte en el grupo, confianza en el criterio de los demás <!-- "un rizoma anarcopacifista"-->
+
+
+--
+
++ El uso de herramientas de código abierto, la reproducibilidad de los análisis y la transparencia de datos: __ciencia abierta__ 
+
+--
+
++ `R` como lengua franca: nos permite comunicarnos entre áreas del conocimiento y estados de la carrera <!--un lab de aprendizaje colectivo-->
+
+--
+
++ Compromiso con el debate público fundamentado, responsabilidad en la relación con gestores de salud, la prensa y el público general: __ciudadanía científica__ (_scientific citizenship_)
+--
+
++ __Apoyo a la ciencia brasileña__ frente a recortes, ataques abiertos y desinformación (ej. movimiento antivacuna)
+
+--
+
++ __Defensa del Sistema Único de Salud__ <!--  sin el cual la situación estaría muchísimo peor 7 millones de casos, 200mil muertes--> `#DefendaoSUS`
+
+
+
+---
+class: middle, center
+# ¡Gracias!   
+# Obrigada!
+
+`r fontawesome::fa("home")` Página web: [https://covid19br.github.io/](https://covid19br.github.io/)
+
+`r fontawesome::fa("github")` GitHub: [https://github.com/covid19br/](https://github.com/covid19br/)  
+`r fontawesome::fa("paper-plane")`  [obscovid19br@gmail.com](mailto:obscovid19br@gmail.com)  
+`r fontawesome::fa("instagram")` Instagram: [@obscovid19br](www.instagram.com/obscovid19br) 
+`r fontawesome::fa("twitter")` Twitter: [@obscovid19br](www.twitter.com/obscovid19br)   
+`r fontawesome::fa("facebook")`  [https://www.facebook.com/obscovid19br](https://www.facebook.com/obscovid19br)
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre1.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre2.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre3.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre4.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre5.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre6.png")
+```
+
+---
+## Miembros del Observatorio COVID19-BR
+
+```{r}
+knitr::include_graphics("fig/sobre7.png")
+```
+
+---
+class: middle, center
+# ¡Gracias!   
+# Obrigada!
+
+`r fontawesome::fa("home")` Página web: [https://covid19br.github.io/](https://covid19br.github.io/)
+
+`r fontawesome::fa("github")` GitHub: [https://github.com/covid19br/](https://github.com/covid19br/)  
+`r fontawesome::fa("paper-plane")`  [obscovid19br@gmail.com](mailto:obscovid19br@gmail.com)  
+`r fontawesome::fa("instagram")` Instagram: [@obscovid19br](www.instagram.com/obscovid19br) 
+`r fontawesome::fa("twitter")` Twitter: [@obscovid19br](www.twitter.com/obscovid19br)   
+`r fontawesome::fa("facebook")`  [https://www.facebook.com/obscovid19br](https://www.facebook.com/obscovid19br)
+
+---
+class: inverse
+
+
+---
+class: hide_logo
+background-image: url("fig/Logo_SUS.png")
+background-size: 200px
+background-position: 95% 5%
+
+
+# Sistema de salud en Brasil
+
++ País continental
++ ~210 millones de personas
++ Desigualdad y heterogeneidad, Sistema Federal (27 Estados)
++ Constitución Federal de 1988: __Sistema Único de Salud__
++ Sistema __Universal, Público y Gratuito__ 
++ Unidades básicas de salud, hospitales, red de __Agentes Comunitarios de Salud (ACS)__ en el frente de atención al público, red de Unidades de Atención Temprana (UPA), hospitales + convenios con la red privada de salud
++ __Larga historia de respuesta efectiva a pandemias/epidemias__. ZIKV en 2014. AIDS
++ Tradición de investigación en salud pública y enfermedades tropicales (FIOCRUZ, Instituto Butantán) y __capacidad de producción de vacunas__ (CORONAVAC)
++ Uno de los mayores programas de vacunación del mundo: 150.000 desde el 17 de Enero
+

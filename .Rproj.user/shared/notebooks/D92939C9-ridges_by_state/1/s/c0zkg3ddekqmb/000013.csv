@@ -1,0 +1,13 @@
+"0","dados_cases <- vroom(""https://github.com/covid19br/sumario_SIVEP/blob/main/sum_dados_2023_03_20.csv.xz?raw=true"", delim = "","")
+"
+"2","Error in vroom_(file, delim = delim %||% col_types$delim, col_names = col_names,  : 
+  embedded nul in string: '\xfd7zXZ\0\0\001i""\xde6\002\0!\001\026\0\0\0t/\xe5\xa3\xee'
+"
+"2","In addition: "
+"2","Warning message:
+"
+"2","In for (i in 1:length(args)) { :"
+"2","
+ "
+"2"," closing unused connection 3 (https://github.com/covid19br/sumario_SIVEP/blob/main/sum_dados_2023_03_20.csv.xz?raw=true)
+"
