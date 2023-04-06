@@ -172,7 +172,7 @@ Zeger, See, and Diggle (1989) proposed, now classical, model to correct delays a
 
 `$$Y_t,u \sim Poisson(\mu_{t,u}), \\ log(\mu_{t,u} = s(t,\beta) + d(\mu, \theta))$$`
 
-.footnote[ Figure extracted from: Zeger, See, and Diggle (1989) ]
+.footnote[ Figure extracted from: Zeger et al. (1989) ]
 
 ]
 
@@ -201,13 +201,13 @@ Bayesian framwework can be used for nowcasting on IDs, as like Dengue and Influe
 
 .pull-left[
 
-The language of nowcasting can be easily visualized by a delay triangle, again on the Bastos, Economou, Gomes et al. (2019):
+The language of nowcasting can be easily visualized by a delay triangle, again on the Bastos et al. (2019):
 
 `$$n_{t,d} \sim NegBin(\lambda_{t,d}, \phi) \\ log(\lambda_{t,d}) = \mu + \alpha_t + \beta_d + \gamma_{t,d}$$`
 
 The random effect `\(\alpha_t\)` to capture the mean temporal evolution of the count-generating process, whereas the `\(\beta_d\)` capture the mean structure of the delay mechanism. These can be modeled using random walks. Lastly, `\(\gamma_{t,d}\)` is the time-delay interaction.
 
-Bastos, Economou, Gomes et al. (2019) extends this model to a spatial version, with space-time and space-delay interactions.
+Bastos et al. (2019) extends this model to a spatial version, with space-time and space-delay interactions.
 
 ]
 
@@ -215,7 +215,7 @@ Bastos, Economou, Gomes et al. (2019) extends this model to a spatial version, w
 
 ![delay-triangle](fig/delay-triangle.png)
 
-.footnote[ Figure extracted from: Bastos, Economou, Gomes et al. (2019) ]
+.footnote[ Figure extracted from: Bastos et al. (2019) ]
 
 ]
 
@@ -239,7 +239,7 @@ class: middle, center, inverse
 
 ## Nowcaster as tool on surveillance
 
-The package born as a need on having a tool that is user-friendly and open to deal with the typical demands on day-to-day of surveillance work. During the first semester of 2022, we wrapped a modification of the model in Bastos, Economou, Gomes et al. (2019) into an R package. We focused in:
+The package born as a need on having a tool that is user-friendly and open to deal with the typical demands on day-to-day of surveillance work. During the first semester of 2022, we wrapped a modification of the model in Bastos et al. (2019) into an R package. We focused in:
 
 + Keeping the model simple, fast and good in one thing, estimating the delay due to notification
     
@@ -458,7 +458,7 @@ class: center, middle, inverse
 
 ## Priors on Bastos et al. 2019
 
-On Bastos, Economou, Gomes et al. (2019) model, the `\(\alpha_t\)` and `\(\beta_d\)` covariates are modeled using random walks, as like:
+On Bastos et al. (2019) model, the `\(\alpha_t\)` and `\(\beta_d\)` covariates are modeled using random walks, as like:
 
 `$$\alpha_t = N(\alpha_{t-1}, \sigma_{\alpha}^2), t =  2,3, \dots, T, \\
 \beta_d = N(\beta_{d-1}, \sigma_{\beta}^2), d = 1,2, \dots, D$$`

@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(RefManageR)
 BibOptions(check.entries = FALSE,
            bib.style = "authoryear", # Bibliography style
-           max.names = 3, # Max author names displayed in bibliography
+           max.names = 1, # Max author names displayed in bibliography
            sorting = "nyt", #Name, year, title sorting
            cite.style = "authoryear", # citation style
            style = "markdown",
@@ -436,7 +436,7 @@ class: middle, center, hide-logo
 Submit a PR: 
     `r fontawesome::fa("github")` GitHub: [**https://github.com/covid19/nowcaster**](https://github.com/covid19br/nowcaster)
 
-Reach us in Twitter, until it you can: 
+Reach us on Twitter, until you can: 
     `r fontawesome::fa("twitter")` Twitter: [**@rafalpx**](www.twitter.com/rafalpx)/[**@leosbastos**](www.twitter.com/leosbastos)
 
 ---
